@@ -30,14 +30,14 @@ public class ProdutoServiceUnitTest {
 	}
 
 	@Test
-	void deveCadastrarProduto() {
+	void givenValidProduct_whenRegisterProduct_thenShouldSaveProduct() {
 		Produto produto = new Produto("Camiseta", "Camiseta branca", 49.90, 10);
 		produtoService.cadastrarProduto(produto);
 		verify(produtoRepository, times(1)).save(any(ProdutoEntity.class));
 	}
 
 	@Test
-	void deveListarTodosProdutos() {
+	void givenProductsInDatabase_whenFindAll_thenShouldReturnProductList() {
 		ProdutoEntity p1 = new ProdutoEntity(new Produto("Camiseta", "Branca", 30.0, 10));
 		ProdutoEntity p2 = new ProdutoEntity(new Produto("Calça", "Jeans", 80.0, 5));
 		when(produtoRepository.findAll()).thenReturn(Arrays.asList(p1, p2));
@@ -48,7 +48,7 @@ public class ProdutoServiceUnitTest {
 	}
 
 	@Test
-	void deveRetornarProdutoPorNome() {
+	void givenExistingProductName_whenFindByName_thenShouldReturnProduct() {
 		ProdutoEntity entity = new ProdutoEntity(new Produto("Tênis", "Esportivo", 199.9, 4));
 		when(produtoRepository.findByNome("Tênis")).thenReturn(entity);
 
@@ -59,7 +59,7 @@ public class ProdutoServiceUnitTest {
 	}
 
 	@Test
-	void deveAtualizarEstoqueComSucesso() {
+	void givenSufficientStock_whenUpdateStock_thenShouldDecreaseStockQuantity() {
 		ProdutoEntity entity = new ProdutoEntity(new Produto("Tênis", "Esportivo", 199.9, 10));
 		entity.setId(1L);
 		when(produtoRepository.findById(1L)).thenReturn(java.util.Optional.of(entity));
@@ -76,7 +76,7 @@ public class ProdutoServiceUnitTest {
 	}
 
 	@Test
-	void deveLancarExcecaoQuandoEstoqueInsuficiente() {
+	void givenInsufficientStock_whenUpdateStock_thenShouldThrowOutOfStockException() {
 		ProdutoEntity entity = new ProdutoEntity(new Produto("Tênis", "Esportivo", 199.9, 2));
 		entity.setId(1L);
 		when(produtoRepository.findById(1L)).thenReturn(java.util.Optional.of(entity));

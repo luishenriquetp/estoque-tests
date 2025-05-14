@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EstoqueController.class)
-public class EstoqueControllerUnitTest {
+public class EstoqueControllerComponentTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +37,7 @@ public class EstoqueControllerUnitTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void deveCadastrarProdutoComSucesso() throws Exception {
+    void givenValidProduct_whenPostToEstoque_thenShouldReturnSuccessMessage() throws Exception {
         Produto produto = new Produto("Camiseta", "Branca", 29.9, 10);
 
         mockMvc.perform(post("/estoque")
@@ -48,7 +48,7 @@ public class EstoqueControllerUnitTest {
     }
 
     @Test
-    void deveListarProdutos() throws Exception {
+    void givenProductsInService_whenGetEstoque_thenShouldReturnProductList() throws Exception {
         Produto produto = new Produto("Tênis", "Corrida", 199.9, 4);
         Mockito.when(produtoService.encontrarTodos()).thenReturn(List.of(produto));
 
@@ -58,7 +58,7 @@ public class EstoqueControllerUnitTest {
     }
 
     @Test
-    void deveBuscarProdutoPorNome() throws Exception {
+    void givenProductName_whenGetEstoqueByName_thenShouldReturnProduct() throws Exception {
         Produto produto = new Produto("Tênis", "Corrida", 199.9, 4);
         Mockito.when(produtoService.encontrarPorNome("Tênis")).thenReturn(produto);
 
@@ -68,7 +68,7 @@ public class EstoqueControllerUnitTest {
     }
 
     @Test
-    void deveAtualizarEstoqueComSucesso() throws Exception {
+    void givenValidOrder_whenPostToUpdateEstoque_thenShouldReturnStockUpdatedMessage() throws Exception {
         Pedido pedido = new Pedido();
         ItemPedido item = new ItemPedido();
         item.setId(1L);
@@ -83,7 +83,7 @@ public class EstoqueControllerUnitTest {
     }
 
     @Test
-    void deveRetornarBadRequestQuandoForaDeEstoque() throws Exception {
+    void givenInsufficientStock_whenPostToUpdateEstoque_thenShouldReturnBadRequestWithErrorMessage() throws Exception {
         Pedido pedido = new Pedido();
         ItemPedido item = new ItemPedido();
         item.setId(1L);
